@@ -1,4 +1,4 @@
-package com.saadahmedsoft.locationfinder.utils
+package com.faizuas.locationfinder.utils
 
 import android.os.Handler
 import android.os.Looper

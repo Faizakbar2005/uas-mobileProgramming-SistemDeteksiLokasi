@@ -1,0 +1,19 @@
+<!-- res/drawable/emboss_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item android:left="2dp" android:top="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#D3D3D3"
+                android:centerColor="#D3D3D2"
+                android:endColor="#D3D1D3"
+                android:angle="45" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+</layer-list>

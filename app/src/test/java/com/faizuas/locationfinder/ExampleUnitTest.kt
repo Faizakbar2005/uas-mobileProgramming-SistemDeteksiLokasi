@@ -1,4 +1,4 @@
-package com.saadahmedsoft.locationfinder
+package com.faizuas.locationfinder
 
 import org.junit.Test
 

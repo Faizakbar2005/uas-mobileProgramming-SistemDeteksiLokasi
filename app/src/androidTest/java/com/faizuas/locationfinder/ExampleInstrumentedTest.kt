@@ -1,4 +1,4 @@
-package com.saadahmedsoft.locationfinder
+package com.faizuas.locationfinder
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "387411201211",
+    "project_id": "uasmoprog-e1f1e",
+    "storage_bucket": "uasmoprog-e1f1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387411201211:android:9e2b6c0228914af095ed9e",
+        "android_client_info": {
+          "package_name": "com.faizuas.locationfinder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAelfo6PMyXaNdZUGOwkIRcmroTWvU27uw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,28 +1,8 @@
-/**
- * Copyright 2022 Saad Ahmed
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Get Location from Google Map.
- * Made by Saad Ahmed on 02-Jul-2022.
- */
-
-package com.saadahmedsoft.locationfinder
+package com.faizuas.locationfinder
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -31,6 +11,7 @@ import android.location.LocationListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -39,32 +20,43 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.saadahmedsoft.locationfinder.databinding.ActivityMapBinding
-import com.saadahmedsoft.locationfinder.utils.delay
+import com.faizuas.locationfinder.databinding.ActivityMapBinding
+import com.faizuas.locationfinder.utils.delay
 import java.io.IOException
 import java.util.*
+import com.google.firebase.auth.FirebaseAuth
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,
     GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveListener,
     GoogleMap.OnCameraMoveStartedListener {
 
     private lateinit var binding: ActivityMapBinding
-
     private var mMap: GoogleMap? = null
     private lateinit var mapView: SupportMapFragment
-
     private val TAG = "location_debug"
-
     private val defaultZoom = 15f
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
+
         mapView = supportFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
         mapView.getMapAsync(this)
+
+        binding.btnGetLocation.setOnClickListener {
+            getCurrentLocation()
+        }
+
+        // Add logout functionality
+        binding.btnLogout.setOnClickListener {
+            logout()
+        }
 
         delay(1000) {
             mMap!!.setOnCameraIdleListener(this)
@@ -104,7 +96,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,
 
         try {
             address = geoCoder.getFromLocation(p0.latitude, p0.longitude, 1)
-            setAddress(address[0])
+            setAddress(address?.get(0))
         } catch (e: Exception) {
         }
     }
@@ -130,7 +122,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,
                 mMap!!.cameraPosition.target.longitude,
                 1
             )
-            setAddress(address[0])
+            setAddress(address?.get(0))
         } catch (e: Exception) {
         }
     }
@@ -191,7 +183,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,
         val geoCoder = Geocoder(this, Locale.getDefault())
         try {
             val addresses: List<Address> =
-                geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 10)
+                geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 10)!!
             val address = addresses[1]
             binding.addressLine.text = address.getAddressLine(0)
             binding.country.text = address.countryName
@@ -199,5 +191,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
+
+    private fun logout() {
+        auth.signOut() // Log out user
+        Toast.makeText(this, "Anda telah logout", Toast.LENGTH_SHORT).show()
+
+        // Redirect to LoginActivity
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close MapActivity
     }
 }
